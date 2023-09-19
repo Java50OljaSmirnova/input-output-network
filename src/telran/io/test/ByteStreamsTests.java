@@ -15,7 +15,8 @@ class ByteStreamsTests {
 	@Order(1)
 	void fileOutputStreamTest() throws FileNotFoundException, IOException {
 		try(OutputStream output =  new FileOutputStream(FILE_NAME);){
-			output.write(DATA.getBytes());	
+			output.write(DATA.getBytes());
+			
 		}
 	}
 	@Test
