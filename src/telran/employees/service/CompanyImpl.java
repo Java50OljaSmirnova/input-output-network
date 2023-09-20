@@ -1,33 +1,41 @@
 package telran.employees.service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import telran.employees.dto.Employee;
 
 public class CompanyImpl implements Company {
-	HashMap<Long, Employee> employees = new HashMap<>(); //most effective structure for the interface methods
+	HashMap<Long, Employee> employees = new HashMap<Long, Employee>();
+	List<Employee> employeesComp = new ArrayList<Employee>();
 	@Override
 	public boolean addEmployee(Employee empl) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean res = false;
+		if(!empl.equals(employees.get(empl.id()))){
+			employees.put(empl.id(), empl);
+			res = true;
+		}
+		return res;
 	}
 
 	@Override
 	public Employee removeEmployee(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return employees.remove(id);
 	}
 
 	@Override
 	public Employee getEmployee(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return employees.get(id);
 	}
 
 	@Override
 	public List<Employee> getEmployees() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		employeesComp.addAll(employees.values());
+		return employeesComp;
 	}
 
 }
