@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,25 +19,22 @@ public interface Company {
 	@SuppressWarnings("unchecked")
 	default void restore(String dataFile) throws Exception {
 		
-		List<Employee> employees = new ArrayList<Employee>();
-		try(ObjectInputStream input = new ObjectInputStream(new FileInputStream(dataFile))){
-			employees = (List<Employee>) input.readObject();
-			for(Employee empl : employees) {
-				addEmployee(empl);
+		if(Files.exists(Path.of(dataFile))) {
+			try(ObjectInputStream stream = new ObjectInputStream(new FileInputStream(dataFile))) {
+				List<Employee> employeesRestore = (List<Employee>) stream.readObject();
+				employeesRestore.forEach(e -> addEmployee(e));
+			}catch(Exception e) {
+				throw new RuntimeException(e.toString());
 			}
-		} catch(RuntimeException e) {
-			System.out.println("RuntimeException - " + e);
 		}
 		
 	}
 	default void save(String dataFile) throws Exception{
 		
-		List<Employee> employees = getEmployees();
-		try(ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(dataFile))){
-			output.writeObject(employees);
-			
-		} catch(RuntimeException e) {
-			System.out.println("RuntimeException - " + e);
+		try(ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(dataFile))) {
+			stream.writeObject(getEmployees());
+		}catch(Exception e) {
+			throw new RuntimeException(e.toString());
 		}
 	}
 }

@@ -19,22 +19,17 @@ import telran.employees.service.CompanyImpl;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CompanyTest {
 	Company company;
-	Employee empl1;
-	Employee empl2;
-	Employee empl3;
-	Employee empl4;
-	Employee empl5;
-	List<Employee> employees = new ArrayList<Employee>();;
+	Employee empl1 = new Employee(123l, "Vasya", "manager", 12500, LocalDate.of(1987, 7, 3));
+	Employee empl2 = new Employee(124l, "Ron", "developer", 15300, LocalDate.of(1989, 1, 10));
+	Employee empl3 = new Employee(125l, "Glory", "manager", 11500, LocalDate.of(1997, 5, 1));
+	Employee empl4 = new Employee(126l, "Arnon", "developer", 17000, LocalDate.of(1999, 3, 17));
+	Employee empl5 = new Employee(138l, "Jorge", "engineer", 18340, LocalDate.of(1982, 12, 23));
+	Employee[] employees = {empl2, empl4};
 	
 	final static String TEST_FILE_NAME = "test.data";
 	@BeforeEach
 	void setUp() throws Exception {
 		company = new CompanyImpl();
-		empl1 = new Employee(123l, "Vasya", "manager", 12500, LocalDate.of(1987, 7, 3));
-		empl2 = new Employee(124l, "Ron", "developer", 15300, LocalDate.of(1989, 1, 10));
-		empl3 = new Employee(125l, "Glory", "manager", 11500, LocalDate.of(1997, 5, 1));
-		empl4 = new Employee(126l, "Arnon", "developer", 17000, LocalDate.of(1999, 3, 17));
-		empl5 = new Employee(138l, "Jorge", "engineer", 18340, LocalDate.of(1982, 12, 23));
 		company.addEmployee(empl2);
 		company.addEmployee(empl4);
 		
@@ -70,11 +65,10 @@ class CompanyTest {
 
 	@Test
 	void testGetEmployees() {
-		employees = company.getEmployees();
+
 		int size = company.getEmployees().size();
-		assertEquals(size, employees.size());
-		int index = employees.indexOf(empl2);
-		assertEquals(employees.get(index), company.getEmployee(empl2.id()));
+		assertEquals(size, employees.length);
+		assertArrayEquals(employees, company.getEmployees().toArray());
 	}
 	
 	@Test

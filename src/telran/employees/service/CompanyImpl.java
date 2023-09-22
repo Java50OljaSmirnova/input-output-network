@@ -8,15 +8,11 @@ import telran.employees.dto.Employee;
 
 public class CompanyImpl implements Company {
 	HashMap<Long, Employee> employees = new HashMap<Long, Employee>();
-	List<Employee> employeesComp = new ArrayList<Employee>();
+	
 	@Override
 	public boolean addEmployee(Employee empl) {
-		boolean res = false;
-		if(!empl.equals(employees.get(empl.id()))){
-			employees.put(empl.id(), empl);
-			res = true;
-		}
-		return res;
+		
+		return employees.putIfAbsent(empl.id(), empl) == null;
 	}
 
 	@Override
@@ -34,8 +30,7 @@ public class CompanyImpl implements Company {
 	@Override
 	public List<Employee> getEmployees() {
 		
-		employeesComp.addAll(employees.values());
-		return employeesComp;
+		return new ArrayList<>(employees.values());
 	}
 
 }
