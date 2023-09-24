@@ -6,7 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 import telran.employees.dto.*;
@@ -37,4 +36,12 @@ public interface Company {
 			throw new RuntimeException(e.toString());
 		}
 	}
+//method of CW/HW #34
+	List<DepartmentSalary> getDepartmentSalaryDistribution();
+	List<SalaryDistribution> getSalaryDistribution(int interval);
+	List<Employee> getEmployeesByDepartment(String department);
+	List<Employee> getEmployeesBySalary(int salaryFrom, int salaryTo);
+	List<Employee> getEmployeesByAge(int ageFrom, int AgeTo);
+	Employee updateSalary(long id, int newSalary);
+	Employee updateDepartment(long id, String department);
 }
