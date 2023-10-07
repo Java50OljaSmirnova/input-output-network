@@ -39,35 +39,55 @@ public interface InputOutput {
 		return readObject(prompt, errorPrompt, Integer::parseInt);
 	};
 	default Integer readInt(String prompt, String errorPrompt, int min, int max) {
-		//TODO
-		return null;
+//		int res = readInt(prompt, errorPrompt);
+		int res = Integer.parseInt(prompt);
+		if(res < min || res > max) {
+			throw new RuntimeException(errorPrompt);
+		}
+		return res;
 	};
 	default Long readLong(String prompt, String errorPrompt) {
 		
 		return readObject(prompt, errorPrompt, Long::parseLong);
 	};
 	default Long readLong(String prompt, String errorPrompt, long min, long max) {
-		//TODO
-		return null;
+//		long res = readLong(prompt, errorPrompt);
+		long res = Long.parseLong(prompt);
+		if(res < min || res > max) {
+			throw new RuntimeException(errorPrompt);
+		}
+		return res;
 	};
 	default Double readDouble(String prompt, String errorPrompt) {
 		
 		return readObject(prompt, errorPrompt, Double::parseDouble);
 	};
 	default String readString(String prompt, String errorPrompt, Predicate<String> pattern){
-		//TODO
-		return null;
+		
+		String res = prompt;
+		if(!pattern.test(res)){
+			throw new RuntimeException(errorPrompt);
+		}
+		
+		return res;
 	};
-	default String readString(String prompt, String errorPromot, HashSet<String> options) {
-		//TODO
-		return null;
+	default String readString(String prompt, String errorPrompt, HashSet<String> options) {
+		String res = prompt;
+		if(!options.contains(res)){
+			throw new RuntimeException(errorPrompt);
+		}
+		
+		return res;
 	};
 	default LocalDate readIsoDate(String prompt, String errorPrompt) {
 		
 		return readObject(prompt, errorPrompt, LocalDate::parse);
 	};
 	default LocalDate readIsoDate(String prompt, String errorPrompt, LocalDate min, LocalDate max) {
-		//TODO
-		return null;
+		LocalDate res = LocalDate.parse(prompt);
+		if(res.isBefore(min) || res.isAfter(max)) {
+			throw new RuntimeException(errorPrompt);
+		}
+		return res;
 	};
 }
