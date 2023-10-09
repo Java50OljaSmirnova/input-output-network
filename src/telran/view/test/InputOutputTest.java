@@ -68,22 +68,16 @@ class InputOutputTest {
 	@Test
 	@Order(2)
 	void testReadEmployeeBySeparateField() {
-		Employee empl = io.readObject("Enter employee <id>#<name>#<iso birthday>#<department>#<salary>", "Wrong Employee",
-				str -> {
-					String[] tokens = str.split("#");
-					if(tokens.length != 5) {
-						throw new RuntimeException("must be 5 tokens");
-					}
-					long id = io.readLong(tokens[0], "Number is less than " + MIN_ID + " or most than " + MAX_ID, MIN_ID, MAX_ID);
-					String name = io.readString(tokens[1], "name must be contains more than two letters where first one is a capital",
-							n -> n.matches(EXPRESIONS));
-					String department = io.readString(tokens[3], "department must be one out of: QA, Development, Audit, Accounting, Management",
-							getOptions());
-					int salary = io.readInt(tokens[4], "Number is less than " + MIN_SALARY + " or most than " + MAX_SALARY, MIN_SALARY, MAX_SALARY);
-					LocalDate birthDate = io.readIsoDate(tokens[2], "Date is state before " + MIN_DATE + " or after " + MAX_DATE, MIN_DATE, MAX_DATE);
-					return new Employee(id, name, department, salary, birthDate);
-				});
-		
+		long id = io.readLong("Enter employee ID", "Number is less than " + MIN_ID + " or most than " + MAX_ID, MIN_ID, MAX_ID);
+		String name = io.readString("Enter employee name",
+				"name must be contains more than two letters where first one is a capital", n -> n.matches(EXPRESIONS));
+		String department = io.readString("Enter employee department",
+				"department must be one out of: QA, Development, Audit, Accounting, Management", getOptions());
+		int salary = io.readInt("Enter employee salary", "Number is less than " + MIN_SALARY + " or most than " + MAX_SALARY,
+				MIN_SALARY, MAX_SALARY);
+		LocalDate birthDate = io.readIsoDate("Enter employee birthDate", "Date is state before " + MIN_DATE + " or after " + MAX_DATE, MIN_DATE, MAX_DATE);
+					
+		Employee empl = new Employee(id, name, department, salary, birthDate);
 		io.writeObjectLine(empl);
 	}
 	private HashSet<String> getOptions() {

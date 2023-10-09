@@ -39,55 +39,56 @@ public interface InputOutput {
 		return readObject(prompt, errorPrompt, Integer::parseInt);
 	};
 	default Integer readInt(String prompt, String errorPrompt, int min, int max) {
-//		int res = readInt(prompt, errorPrompt);
-		int res = Integer.parseInt(prompt);
+		return readObject(prompt, errorPrompt, str -> {
+		int res = Integer.parseInt(str);
 		if(res < min || res > max) {
-			throw new RuntimeException(errorPrompt);
+			throw new RuntimeException("Enter number is incorrect");
 		}
-		return res;
+		return res;});
 	};
 	default Long readLong(String prompt, String errorPrompt) {
 		
 		return readObject(prompt, errorPrompt, Long::parseLong);
 	};
 	default Long readLong(String prompt, String errorPrompt, long min, long max) {
-//		long res = readLong(prompt, errorPrompt);
-		long res = Long.parseLong(prompt);
-		if(res < min || res > max) {
-			throw new RuntimeException(errorPrompt);
-		}
-		return res;
-	};
+		return readObject(prompt, errorPrompt, str -> {
+			long res = Long.parseLong(str);
+			if(res < min || res > max) {
+				throw new RuntimeException("Enter number is incorrect");
+			}
+			return res;});
+			};
 	default Double readDouble(String prompt, String errorPrompt) {
 		
 		return readObject(prompt, errorPrompt, Double::parseDouble);
 	};
 	default String readString(String prompt, String errorPrompt, Predicate<String> pattern){
+		return readObject(prompt, errorPrompt, str -> {
+			if(!pattern.test(str)){
+				throw new RuntimeException("Enter name is incorrect");
+			}	
+			return str;
+		});
 		
-		String res = prompt;
-		if(!pattern.test(res)){
-			throw new RuntimeException(errorPrompt);
-		}
+	};	default String readString(String prompt, String errorPrompt, HashSet<String> options) {
+		return readObject(prompt, errorPrompt, str -> {
+			if(!options.contains(str)){
+				throw new RuntimeException("Enter option is incorrect");
+			}	
+			return str;
+		});
 		
-		return res;
-	};
-	default String readString(String prompt, String errorPrompt, HashSet<String> options) {
-		String res = prompt;
-		if(!options.contains(res)){
-			throw new RuntimeException(errorPrompt);
-		}
-		
-		return res;
 	};
 	default LocalDate readIsoDate(String prompt, String errorPrompt) {
 		
 		return readObject(prompt, errorPrompt, LocalDate::parse);
 	};
 	default LocalDate readIsoDate(String prompt, String errorPrompt, LocalDate min, LocalDate max) {
-		LocalDate res = LocalDate.parse(prompt);
+		return readObject(prompt, errorPrompt, str -> {
+		LocalDate res = LocalDate.parse(str);
 		if(res.isBefore(min) || res.isAfter(max)) {
-			throw new RuntimeException(errorPrompt);
+			throw new RuntimeException("Enter date is incorrect");
 		}
-		return res;
+		return res;});
 	};
 }
