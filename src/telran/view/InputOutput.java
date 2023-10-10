@@ -39,25 +39,35 @@ public interface InputOutput {
 		return readObject(prompt, errorPrompt, Integer::parseInt);
 	};
 	default Integer readInt(String prompt, String errorPrompt, int min, int max) {
-		return readObject(prompt, errorPrompt, str -> {
-		int res = Integer.parseInt(str);
-		if(res < min || res > max) {
-			throw new RuntimeException("Enter number is incorrect");
-		}
-		return res;});
+		return readObject(String.format("%s[%d - %d] ", prompt, min, max), errorPrompt,
+				string -> {
+
+			int res = Integer.parseInt(string);
+			if (res < min) {
+				throw new IllegalArgumentException("must be not less than " + min);
+			}
+			if (res > max) {
+				throw new IllegalArgumentException("must be not greater than " + max);
+			}
+			return res;
+
+		});
 	};
 	default Long readLong(String prompt, String errorPrompt) {
 		
 		return readObject(prompt, errorPrompt, Long::parseLong);
 	};
 	default Long readLong(String prompt, String errorPrompt, long min, long max) {
-		return readObject(prompt, errorPrompt, str -> {
+		return readObject(String.format("%s[%d - %d] ", prompt, min, max), errorPrompt, str -> {
 			long res = Long.parseLong(str);
-			if(res < min || res > max) {
-				throw new RuntimeException("Enter number is incorrect");
+			if (res < min) {
+				throw new IllegalArgumentException("must be not less than " + min);
+			}
+			if (res > max) {
+				throw new IllegalArgumentException("must be not greater than " + max);
 			}
 			return res;});
-			};
+		};
 	default Double readDouble(String prompt, String errorPrompt) {
 		
 		return readObject(prompt, errorPrompt, Double::parseDouble);
@@ -65,7 +75,7 @@ public interface InputOutput {
 	default String readString(String prompt, String errorPrompt, Predicate<String> pattern){
 		return readObject(prompt, errorPrompt, str -> {
 			if(!pattern.test(str)){
-				throw new RuntimeException("Enter name is incorrect");
+				throw new IllegalArgumentException("");
 			}	
 			return str;
 		});
@@ -87,7 +97,7 @@ public interface InputOutput {
 		return readObject(prompt, errorPrompt, str -> {
 		LocalDate res = LocalDate.parse(str);
 		if(res.isBefore(min) || res.isAfter(max)) {
-			throw new RuntimeException("Enter date is incorrect");
+			throw new IllegalArgumentException(String.format("Date should be in the range from %s to %s", min, max));
 		}
 		return res;});
 	};
