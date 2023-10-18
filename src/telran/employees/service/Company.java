@@ -16,7 +16,7 @@ public interface Company {
 	Employee getEmployee(long id);//returns reference to an employee by the given id otherwise null (if employee doesn't exist)
 	List<Employee> getEmployees(); //returns list of all employee objects. In the case of none exists it returns empty list
 	@SuppressWarnings("unchecked")
-	default void restore(String dataFile) throws Exception {
+	default void restore(String dataFile) {
 		
 		if(Files.exists(Path.of(dataFile))) {
 			try(ObjectInputStream stream = new ObjectInputStream(new FileInputStream(dataFile))) {
@@ -28,7 +28,7 @@ public interface Company {
 		}
 		
 	}
-	default void save(String dataFile) throws Exception{
+	default void save(String dataFile){
 		
 		try(ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(dataFile))) {
 			stream.writeObject(getEmployees());

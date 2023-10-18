@@ -39,7 +39,7 @@ public class OperationsAppl {
 		LocalDate currentDate = LocalDate.now();
 		long numberOfDays =  io.readLong("Enter number of days", "Wrong number");
 		LocalDate dateBefore = currentDate.minusDays(numberOfDays);
-		io.writeObjectLine("Date after " + numberOfDays + " days - " + dateBefore);
+		io.writeObjectLine("Date before " + numberOfDays + " days - " + dateBefore);
 	}
 	static void dayBetween(InputOutput io) {
 		LocalDate[] dates = getDates(io);
