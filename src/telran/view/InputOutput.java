@@ -15,7 +15,7 @@ public interface InputOutput {
 		writeString(object.toString());
 	}
 	default void writeObjectLine(Object object) {
-		writeLine(object + "\n");
+		writeLine(object.toString());
 	};
 	default <T> T readObject(String prompt, String errorPrompt, Function<String, T> mapper) {
 		boolean running = false;
