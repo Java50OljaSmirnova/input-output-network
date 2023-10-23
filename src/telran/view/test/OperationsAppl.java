@@ -57,10 +57,10 @@ public class OperationsAppl {
 
 	private static Item[] getNumberOperationsItems() {
 		return new Item[] {
-				Item.of("Add two numbers", ArithmeticCalculatorAppl::addItem),
-				Item.of("Subtract two numbers", ArithmeticCalculatorAppl::subtractItem),
-				Item.of("Multiply two numbers", ArithmeticCalculatorAppl::multiplyItem),
-				Item.of("Divide two numbers", ArithmeticCalculatorAppl::divideItem),
+				Item.of("Add two numbers", OperationsAppl::addItem),
+				Item.of("Subtract two numbers", OperationsAppl::subtractItem),
+				Item.of("Multiply two numbers",OperationsAppl::multiplyItem),
+				Item.of("Divide two numbers", OperationsAppl::divideItem),
 				Item.exit()
 		};
 	}
