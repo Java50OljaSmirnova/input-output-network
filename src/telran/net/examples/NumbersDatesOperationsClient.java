@@ -72,15 +72,20 @@ public class NumbersDatesOperationsClient {
 		int days = 0;
 		if(isBetween) {
 		   date2 = io1.readIsoDate("Enter second date in ISO format", "Wrong date");
+		   writer.printf("%s#%s#%s", type, date1.toString(), date2.toString());
+			try {
+				io1.writeLine(reader.readLine());
+			}catch(IOException e) {
+				
+			}
 		} else {
 		   days = io1.readInt("Enter number of days", "Wrong number of days", 1, Integer.MAX_VALUE);
-		}
-		
-		writer.printf("%s#%d#%d", type, date1, date2 == null ? days : date2);
-		try {
-			io1.writeLine(reader.readLine());
-		}catch(IOException e) {
-			
+		   writer.printf("%s#%s#%s", type, date1.toString(), String.valueOf(days));
+			try {
+				io1.writeLine(reader.readLine());
+			}catch(IOException e) {
+				
+			}
 		}
 	}
 

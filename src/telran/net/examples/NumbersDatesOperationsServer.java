@@ -15,7 +15,7 @@ public class NumbersDatesOperationsServer {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException {
 		ServerSocket serverSocket = new ServerSocket(PORT);
-		System.out.println("Server is listening on port" + PORT);
+		System.out.println("Server is listening on port " + PORT);
 		while(true) {
 			Socket socket = serverSocket.accept();
 			runProtocol(socket);
