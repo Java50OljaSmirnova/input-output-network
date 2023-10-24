@@ -22,11 +22,11 @@ public class NumbersDatesOperationsClient {
 		Menu numberMenu = new Menu("Number operations", numberOperationsItems);
 		Item[] dateOperationsItems = getDateOperationsItems();
 		Menu dateMenu = new Menu("Date operations", dateOperationsItems);
-		Menu menu = new Menu("Operations-Client", numberMenu, dateMenu, Item.of("Exist", io1 -> {
+		Menu menu = new Menu("Operations-Client", numberMenu, dateMenu, Item.of("Exit", io1 -> {
 			try {
 				socket.close();
 			}catch(IOException e) {
-				
+				e.printStackTrace();
 			}
 		}, true));
 		menu.perform(io);
@@ -47,11 +47,11 @@ public class NumbersDatesOperationsClient {
 	private static void runProtocolOfNumbers(String type, InputOutput io1) {
 		double num1 = io1.readDouble("Enter first number", "Wrong number");
 		double num2 = io1.readDouble("Enter second number", "Wrong number");
-		writer.printf("%s#%s#%s", type, String.valueOf(num1), String.valueOf(num2));
+		writer.printf("%s#%s#%s\n", type, String.valueOf(num1), String.valueOf(num2));
 		try {
 			io1.writeLine(reader.readLine());
 		}catch(IOException e) {
-			
+			e.printStackTrace();
 		}
 		
 	}
@@ -72,19 +72,19 @@ public class NumbersDatesOperationsClient {
 		int days = 0;
 		if(isBetween) {
 		   date2 = io1.readIsoDate("Enter second date in ISO format", "Wrong date");
-		   writer.printf("%s#%s#%s", type, date1.toString(), date2.toString());
+		   writer.printf("%s#%s#%s%n", type, date1.toString(), date2.toString());
 			try {
 				io1.writeLine(reader.readLine());
 			}catch(IOException e) {
-				
+				e.printStackTrace();
 			}
 		} else {
 		   days = io1.readInt("Enter number of days", "Wrong number of days", 1, Integer.MAX_VALUE);
-		   writer.printf("%s#%s#%s", type, date1.toString(), String.valueOf(days));
+		   writer.printf("%s#%s#%s%n", type, date1.toString(), String.valueOf(days));
 			try {
 				io1.writeLine(reader.readLine());
 			}catch(IOException e) {
-				
+				e.printStackTrace();
 			}
 		}
 	}

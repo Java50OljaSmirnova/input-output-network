@@ -24,6 +24,7 @@ public class ReverseLengthServerAppl {
 			while(running) {
 				String request = reader.readLine();
 				if(request == null) {
+					System.out.println("client closed connection");
 					running = false;
 				} else {
 					String response = getResponse(request);

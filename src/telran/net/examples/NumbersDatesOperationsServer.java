@@ -12,7 +12,6 @@ public class NumbersDatesOperationsServer {
 
 	private static final int PORT = 5000;
 
-	@SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException {
 		ServerSocket serverSocket = new ServerSocket(PORT);
 		System.out.println("Server is listening on port " + PORT);
@@ -30,6 +29,7 @@ public class NumbersDatesOperationsServer {
 			while(running) {
 				String request = reader.readLine();
 				if(request == null) {
+					System.out.println("client" + socket.getRemoteSocketAddress() + "closed connection");
 					running = false;
 				} else {
 					String response = getResponse(request);
@@ -61,5 +61,6 @@ public class NumbersDatesOperationsServer {
 		}
 		return response;
 	}
+	
 
 }
