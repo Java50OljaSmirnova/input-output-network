@@ -22,7 +22,7 @@ public class NumbersDatesProtocol implements ApplProtocol {
 		case "daysBetween" -> getSolutionOfDatesOperation(request.requestData(), true);
 		default -> new Response(ResponseCode.WRONG_TYPE, "Wrong type");
 		};
-		return null;
+		return response;
 	}
 
 	private Response getSolutionOfDatesOperation(Serializable requestData, boolean isBetween) {

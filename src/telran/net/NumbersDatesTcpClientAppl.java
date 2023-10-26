@@ -44,7 +44,7 @@ public class NumbersDatesTcpClientAppl {
 		double num1 = io1.readDouble("Enter first number", "Wrong number");
 		double num2 = io1.readDouble("Enter second number", "Wrong number");
 		String requestData = String.valueOf(num1) + "#" + String.valueOf(num2);
-		client.send(type, requestData);
+		io1.writeObjectLine(client.send(type, requestData));
 	}
 
 	private static Item[] getDateOperationsItems() {
@@ -71,7 +71,6 @@ public class NumbersDatesTcpClientAppl {
 		   }
 		   requestData = date1.toString() + "#" + String.valueOf(days);
 		} 
-		client.send(type, requestData);
+		io1.writeObjectLine(client.send(type, requestData));
 	}
-
 }
