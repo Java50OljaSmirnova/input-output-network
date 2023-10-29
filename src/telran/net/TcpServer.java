@@ -20,7 +20,7 @@ public class TcpServer implements Runnable {
 		try {
 			while(true) {
 				Socket socket = serverSocket.accept();
-				TcpClientServer client = new TcpClientServer(socket, protocol);
+				ClientSessionHandler client = new ClientSessionHandler(socket, protocol);
 				client.run();
 			}
 		}catch(Exception e) {

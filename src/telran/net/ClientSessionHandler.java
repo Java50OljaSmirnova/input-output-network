@@ -1,13 +1,13 @@
 package telran.net;
 import java.net.*;
 import java.io.*;
-public class TcpClientServer implements Runnable {
+public class ClientSessionHandler implements Runnable {
 	Socket socket;
 	ObjectInputStream reader;
 	ObjectOutputStream writer;
 	ApplProtocol protocol;
 	
-	public TcpClientServer(Socket socket, ApplProtocol protocol) throws Exception{
+	public ClientSessionHandler(Socket socket, ApplProtocol protocol) throws Exception{
 		this.socket = socket;
 		this.protocol = protocol;
 		reader = new ObjectInputStream(socket.getInputStream());
@@ -21,6 +21,7 @@ public class TcpClientServer implements Runnable {
 				Request request = (Request) reader.readObject();
 				Response response = protocol.getResponse(request);
 				writer.writeObject(response);
+				writer.reset();
 			}
 		} catch(EOFException e) {
 			System.out.println("Client closed connection");
