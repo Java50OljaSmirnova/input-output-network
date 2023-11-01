@@ -23,23 +23,24 @@ public class CompanyProtocol implements ApplProtocol {
 		String requestType = request.requestType();
 		Response response = null;
 		Serializable responseData = 0;
+		Integer defaultValue = Integer.MAX_VALUE;
 		try {
 			responseData = switch(requestType) {
-			case "employee/add" -> employee_add(requestData);
-			case "employee/remove" -> employee_remove(requestData);
-			case "employee/get" -> employees_get(requestData);
-			case "employees/all" -> employees_all(requestData);
-			case "employees/department/salary/distribution" -> 
+			case CompanyApi.EMPLOYEE_ADD -> employee_add(requestData);
+			case CompanyApi.EMPLOYEE_REMOVE -> employee_remove(requestData);
+			case CompanyApi.EMPLOYEE_GET -> employees_get(requestData);
+			case CompanyApi.EMPLOYEES_ALL -> employees_all(requestData);
+			case CompanyApi.EMPLOYEES_DEPARTMENT_SALARY_DISTRIBUTION -> 
 			        employees_department_salary_distribution(requestData);
-			case "employees/salary/distribution" -> employees_salary_distribution(requestData);
-			case "employees/byDepartment" -> employees_byDepartment(requestData);
-			case "employees/bySalary" -> employees_bySalary(requestData);
-			case "employees/byAge" -> employees_byAge(requestData);
-			case "employee/salary/update"-> employee_salary_update(requestData);
-			case "employee/department/update" -> employee_department_update(requestData);
-			default -> 0;
+			case CompanyApi.EMPLOYEES_SALARY_DISTRUBUTION -> employees_salary_distribution(requestData);
+			case CompanyApi.EMPLOYEES_BY_DEPARTMENT -> employees_byDepartment(requestData);
+			case CompanyApi.EMPLOYEES_BY_SALARY -> employees_bySalary(requestData);
+			case CompanyApi.EMPLOYEES_BY_AGE -> employees_byAge(requestData);
+			case CompanyApi.EMPLOYEE_SALARY_UPDATE-> employee_salary_update(requestData);
+			case CompanyApi.EMPLOYEE_DEPARTMENT_UPDATE -> employee_department_update(requestData);
+			default -> defaultValue;
 			};
-			response = responseData == (Integer) 0 ? new Response(ResponseCode.WRONG_TYPE, requestType) : 
+			response = responseData == defaultValue ? new Response(ResponseCode.WRONG_TYPE, requestType) : 
 					new Response(ResponseCode.OK, responseData);
 		} catch (Exception e) {
 			response = new Response(ResponseCode.WRONG_DATA, e.getMessage());
