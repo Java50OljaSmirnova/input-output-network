@@ -13,7 +13,6 @@ public class CompanyClientAppl {
 
 	private static final String HOST = "localhost";
 	private static final int PORT = 5000;
-	private static final String DEFAULT_FILE_NAME = "employees.data";
 
 	public static void main(String[] args){
 		InputOutput io = new SystemInputOutput();
@@ -24,7 +23,6 @@ public class CompanyClientAppl {
 			ArrayList<Item> items = CompanyController.getItems(company);
 			items.add(Item.of("Exit", io1 -> {
 				try {
-					company.save(DEFAULT_FILE_NAME);
 					handler.close();
 				} catch (IOException e) {
 					io.writeLine(e.getMessage());
