@@ -5,21 +5,17 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TcpServer implements Runnable {
 	public static final int IDLE_TIMEOUT = 100;
-	public static final int TOTAL_IDLE_TIME = 10000;
 	private int port;
 	private ApplProtocol protocol;
 	private ServerSocket serverSocket;
 	ExecutorService executor;
-	public static AtomicInteger counterClientsConnected;
-	private int nThreads = Runtime.getRuntime().availableProcessors();
-
-	public int getnThreads() {
-		return nThreads;
-	}
+	AtomicInteger counterClientsConnected = new AtomicInteger(0);
+	public int nThreads = Runtime.getRuntime().availableProcessors();
 
 	public TcpServer(int port, ApplProtocol protocol) throws Exception {
 		this.port = port;
@@ -27,7 +23,6 @@ public class TcpServer implements Runnable {
 		serverSocket = new ServerSocket(port);
 		serverSocket.setSoTimeout(IDLE_TIMEOUT);
 		executor =  Executors.newFixedThreadPool(nThreads);
-		counterClientsConnected = new AtomicInteger();
 	}
 
 	@Override
@@ -36,9 +31,9 @@ public class TcpServer implements Runnable {
 		while (!executor.isShutdown()) {
 			try {
 				Socket socket = serverSocket.accept();
+				counterClientsConnected.incrementAndGet();
 				socket.setSoTimeout(IDLE_TIMEOUT);
 				ClientSessionHandler client = new ClientSessionHandler(socket, protocol, this);
-				counterClientsConnected.incrementAndGet();
 				executor.execute(client);
 			} catch (SocketTimeoutException e) {
 				//for exit from accept to another iteration of cycle
@@ -49,8 +44,9 @@ public class TcpServer implements Runnable {
 		}
 	}
 	
-	public void shutdown() {
+	public void shutdown() throws InterruptedException {
 		executor.shutdownNow();
+		executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 	}
 
 }

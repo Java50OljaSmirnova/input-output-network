@@ -2,6 +2,7 @@ package telran.net;
 import java.net.*;
 import java.io.*;
 public class ClientSessionHandler implements Runnable {
+	private static final int TOTAL_IDLE_TIME = 30000;
 	Socket socket;
 	ObjectInputStream reader;
 	ObjectOutputStream writer;
@@ -28,23 +29,24 @@ public class ClientSessionHandler implements Runnable {
 				
 			} catch (SocketTimeoutException e) {
 				startLoadingTime += TcpServer.IDLE_TIMEOUT;
-				if(startLoadingTime > TcpServer.TOTAL_IDLE_TIME && 
-						TcpServer.counterClientsConnected.get() > tcpServer.getnThreads()) {
-					try {
-						TcpServer.counterClientsConnected.decrementAndGet();
-						socket.close();
-					} catch (IOException e1) {
-						
-						e1.printStackTrace();
-					}
-					System.out.println("total Idle time of client session exceeds a predefined value");
+				if(startLoadingTime > TOTAL_IDLE_TIME && 
+						tcpServer.counterClientsConnected.get() > tcpServer.nThreads) {
 					break;
 				}
 			} catch (EOFException e) {
 				System.out.println("Client closed connection");
+				break;
 			} catch (Exception e) {
 				System.out.println("Abnormal clossing connection");
+				break;
 			}
+		}
+		try {
+			socket.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}finally {
+			tcpServer.counterClientsConnected.decrementAndGet();
 		}
 
 	}
