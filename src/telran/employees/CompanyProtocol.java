@@ -1,6 +1,7 @@
 package telran.employees;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import telran.employees.dto.*;
@@ -20,30 +21,18 @@ public class CompanyProtocol implements ApplProtocol {
 	@Override
 	public Response getResponse(Request request) {
 		Serializable requestData = request.requestData();
-		String requestType = request.requestType();
+		String requestType = request.requestType().replace("/", "_");
 		Response response = null;
 		Serializable responseData = 0;
 		Integer defaultValue = Integer.MAX_VALUE;
 		try {
-			responseData = switch(requestType) {
-			case CompanyApi.EMPLOYEE_ADD -> employee_add(requestData);
-			case CompanyApi.EMPLOYEE_REMOVE -> employee_remove(requestData);
-			case CompanyApi.EMPLOYEE_GET -> employees_get(requestData);
-			case CompanyApi.EMPLOYEES_ALL -> employees_all(requestData);
-			case CompanyApi.EMPLOYEES_DEPARTMENT_SALARY_DISTRIBUTION -> 
-			        employees_department_salary_distribution(requestData);
-			case CompanyApi.EMPLOYEES_SALARY_DISTRUBUTION -> employees_salary_distribution(requestData);
-			case CompanyApi.EMPLOYEES_BY_DEPARTMENT -> employees_byDepartment(requestData);
-			case CompanyApi.EMPLOYEES_BY_SALARY -> employees_bySalary(requestData);
-			case CompanyApi.EMPLOYEES_BY_AGE -> employees_byAge(requestData);
-			case CompanyApi.EMPLOYEE_SALARY_UPDATE-> employee_salary_update(requestData);
-			case CompanyApi.EMPLOYEE_DEPARTMENT_UPDATE -> employee_department_update(requestData);
-			default -> defaultValue;
-			};
+			Method method = CompanyProtocol.class.getDeclaredMethod(requestType, Serializable.class);
+			method.setAccessible(true);
+			responseData = (Serializable) method.invoke(new CompanyProtocol(company), requestData);
 			response = responseData == defaultValue ? new Response(ResponseCode.WRONG_TYPE, requestType) : 
 					new Response(ResponseCode.OK, responseData);
 		} catch (Exception e) {
-			response = new Response(ResponseCode.WRONG_DATA, e.getMessage());
+			response = new Response(ResponseCode.WRONG_DATA, requestType);
 		}
 		
 		return response;
@@ -98,7 +87,7 @@ public class CompanyProtocol implements ApplProtocol {
 		return new ArrayList<>(company.getEmployees());
 	}
 
-	private Serializable employees_get(Serializable requestData) {
+	private Serializable employee_get(Serializable requestData) {
 		long id = (long) requestData;
 		return company.getEmployee(id);
 	}
