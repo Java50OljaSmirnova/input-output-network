@@ -24,13 +24,12 @@ public class CompanyProtocol implements ApplProtocol {
 		String requestType = request.requestType().replace("/", "_");
 		Response response = null;
 		Serializable responseData = 0;
-		Integer defaultValue = Integer.MAX_VALUE;
 		try {
 			Method method = CompanyProtocol.class.getDeclaredMethod(requestType, Serializable.class);
-			method.setAccessible(true);
-			responseData = (Serializable) method.invoke(new CompanyProtocol(company), requestData);
-			response = responseData == defaultValue ? new Response(ResponseCode.WRONG_TYPE, requestType) : 
-					new Response(ResponseCode.OK, responseData);
+			responseData = (Serializable) method.invoke(this, requestData);
+			response = new Response(ResponseCode.OK, responseData);
+		}catch (NoSuchMethodException e) {
+			response = new Response(ResponseCode.WRONG_TYPE, requestType);
 		} catch (Exception e) {
 			response = new Response(ResponseCode.WRONG_DATA, requestType);
 		}
